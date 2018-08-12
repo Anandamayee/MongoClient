@@ -7,7 +7,7 @@ var { ObjectID } = require('mongodb');
 var { mongoose } = require('./db/mongoose');
 var { UserDetails, addUserDetails, getUserDeatils, getUserDeatilsById } = require('./models/user');
 
-port = process.env.PORT | 4200;
+    port = process.env.PORT || 4200;
 
 var app = express(); 9
 app.use(bodyParser.json());
