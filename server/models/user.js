@@ -83,8 +83,16 @@ let addUserDetails = (body) => {
     );
     return userDetails.save();
 }
+let getUserDeatilsById = (id) => {
+    return UserDetails.findById(id);
+}
 
 let getUserDeatils = () => {
-   return UserDetails.find();
+    return UserDetails.find();
 }
-module.exports = { UserDetails, addUserDetails, getUserDeatils }
+module.exports = {
+    UserDetails,
+    addUserDetails,
+    getUserDeatils,
+    getUserDeatilsById
+}
