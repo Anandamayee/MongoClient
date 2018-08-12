@@ -81,9 +81,10 @@ let addUserDetails = (body) => {
             password: body.password
         }
     );
-    userDetails.save().then((result) => {
-        console.log(result);
-    }, error => { throw Error("error happened  ", error) });
+    return userDetails.save();
 }
 
-module.exports = { UserDetails, addUserDetails }
+let getUserDeatils = () => {
+   return UserDetails.find();
+}
+module.exports = { UserDetails, addUserDetails, getUserDeatils }
