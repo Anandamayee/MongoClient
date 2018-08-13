@@ -1,17 +1,29 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var { ObjectID } = require('mongodb');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { ObjectID } = require('mongodb');
+const _ = require('lodash');
 
 
 var { mongoose } = require('./db/mongoose');
 var { UserDetails, addUserDetails, getUserDeatils, getUserDeatilsById } = require('./models/user');
+var { Todo, addTodo } = require('./models/todo');
+var { Login, loginCredential } = require('./models/login');
 
-    port = process.env.PORT || 4200;
+var port = process.env.PORT || 4200;
 
 var app = express(); 9
 app.use(bodyParser.json());
 
+
+app.post('/addTodo', (req, res, next) => {
+    console.log("req.body  ", req.body);
+    let body = req.body;
+    addTodo(body).then((result) => {
+        console.log(result);
+        res.send(result);
+    }, error => { res.status(400).send(error) });
+});
 
 app.post('/addUser', (req, res, next) => {
     console.log("req.body  ", req.body);
@@ -46,6 +58,22 @@ app.get('/getUser/:id', (req, res, next) => {
         }).catch(error => res.status(400).send(error));
     }
 });
+
+//x-auth-custome http header
+// let login = new Login(body); - willgenerate id
+
+app.post('/login', (req, res, next) => {
+    console.log("req.body  ", req.body);
+    let body = _.pick(req.body, ['email', 'password']);
+    let login = new Login(body);
+    login.generateAuthToken().then((token) => {
+        console.log(token);
+        res.header('x-auth', token).send(login);
+    }).catch(error => {
+        console.log(error);
+        res.status(400).send(error)
+    })
+})
 
 app.listen(port, () => {
     console.log(`server started ${port}`);

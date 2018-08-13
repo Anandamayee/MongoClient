@@ -18,7 +18,7 @@ var UserDetails = mongoose.model('UserDetails', {
         type: String,
         required: [true, "Enter Password "],
         trime: true,
-        minlength: 6
+        minlength: 6,
     },
     age: {
         type: Number,
