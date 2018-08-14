@@ -9,6 +9,7 @@ var { mongoose } = require('./db/mongoose');
 var { UserDetails, addUserDetails, getUserDeatils, getUserDeatilsById } = require('./models/user');
 var { Todo, addTodo } = require('./models/todo');
 var { Login, loginCredential } = require('./models/login');
+var { authenticate } = require('./middleware/authenticate');
 
 var port = process.env.PORT || 4200;
 
@@ -73,7 +74,28 @@ app.post('/login', (req, res, next) => {
         console.log(error);
         res.status(400).send(error)
     })
-})
+});
+// verify login
+// app.get('/get/me', (req, res) => {
+//     let token = req.header('x-auth');
+//     Login.findByToken(token).then(login => {
+//         if (!login) {
+//             return Promise.reject();
+//         }
+//         res.send(login);
+//     }).catch(error => {
+//         console.log("error.....   ", error);
+//         res.status(404).send(error);
+//     })
+// });
+
+
+//authentication middleware 
+app.get('/get/me', authenticate, (req, res) => {
+    res.send(req.login);
+});
+
+
 
 app.listen(port, () => {
     console.log(`server started ${port}`);

@@ -50,10 +50,29 @@ LoginSchema.methods.generateAuthToken = function () {
         return token;
     });
 }
+LoginSchema.statics.findByToken = function (token) {
+    let Login = this;
+    let decoded;
+
+    try {
+        decoded = jwt.verify(token, '123abc');
+    }
+    catch (error) {
+        // return new Promise((resolve, reject) => {
+        //     reject();
+        // })
+        return Promise.reject(error);
+    }
+    return Login.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+}
 
 let loginCredential = (body) => {
     let login = new Login(body);
-    // Login -- model
+    // Login -- model method
     // login -instance method
 
 
